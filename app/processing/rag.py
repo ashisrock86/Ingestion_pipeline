@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from langchain.embeddings import HuggingFaceEmbeddings
 
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
@@ -17,9 +18,8 @@ INDEX_PATH = "./faiss_index"
 
 embeddings = HuggingFaceBgeEmbeddings()
 
-llm = ChatGroq(
-    api_key='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',
-    model="llama3-70b-8192"
+model = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
 
