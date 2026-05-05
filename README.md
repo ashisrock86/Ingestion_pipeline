@@ -1,59 +1,101 @@
-# Ingestion Pipeline
+# Ingestion Pipeline (RAG-Ready Content System)
 
-A FastAPI-based content ingestion and retrieval prototype.
+A FastAPI + LangChain-based content ingestion, processing, and retrieval system with FAISS vector search and LLM-powered RAG (Groq).
 
-## What is included
+---
 
-- `app/api/main.py` - FastAPI app entrypoint with a runnable `main()` function.
-- `app/api/routes/health.py` - health check endpoint.
-- `app/api/routes/documents.py` - document upload endpoint.
-- `pyproject.toml` - project metadata and dependencies.
+## 🚀 What this project does
 
-## Current API surface
+This system implements a full **end-to-end document intelligence pipeline**:
 
-- `GET /` - root welcome endpoint.
-- `GET /health` - simple health check.
-- `POST /documents/upload` - upload a raw document file and receive file metadata.
+### 1. Ingestion
+- Upload PDF documents via API
+- Extract raw text from files
 
-## How to run
+### 2. Processing
+- Clean and extract text using `PyPDF`
+- Chunk documents into smaller semantic segments
+- Attach metadata (document_id, filename, chunk index)
 
-1. Activate your Python environment:
-   ```bash
-   source .venv/bin/activate
-   ```
-2. Start the app:
-   ```bash
-   python app/api/main.py
-   ```
-3. Alternatively run Uvicorn directly:
-   ```bash
-   uvicorn app.api.main:app --reload --port 8200
-   ```
+### 3. Indexing
+- Generate embeddings using HuggingFace models
+- Store vectors in **FAISS index**
 
-## Development progress so far
+### 4. Retrieval
+- Perform semantic similarity search over stored chunks
+- Return most relevant document sections
 
-- Built a minimal FastAPI-first application scaffold.
-- Added a file upload endpoint in `app/api/routes/documents.py`.
-- Added a health endpoint in `app/api/routes/health.py`.
-- Configured the API router and app entrypoint in `app/api/main.py`.
+### 5. RAG (Retrieval Augmented Generation)
+- Retrieve relevant chunks from FAISS
+- Pass context to **Groq LLM**
+- Generate grounded answers based only on retrieved content
 
-## Architecture and next steps
+---
 
-This project is intended to become a content pipeline with:
+## 🧠 Architecture
+PDF Upload
+↓
+Text Extraction (PyPDF)
+↓
+Chunking
+↓
+Embedding (HuggingFace)
+↓
+FAISS Vector Store
+↓
+Similarity Search
+↓
+Groq LLM (RAG Answer)
 
-- ingestion of raw content,
-- processing to structured form,
-- retrieval via index/query,
-- traceability of transformations.
 
-Next development steps include:
+---
 
-- wire in a relational database for raw and processed storage,
-- implement document processing/cleaning/summarization,
-- add retrieval/search endpoints,
-- add traceability metadata and chunk indexing,
-- build a simple frontend or admin UI for browsing ingested documents.
+## 📡 API Surface
 
-## Notes
+### Health
 
-At this stage, the upload endpoint returns only file metadata and size. The current app includes a placeholder for DB state in `app/api/main.py`.
+- `GET /` → root message
+- `GET /health` → service health check
+
+---
+
+### Document Ingestion
+
+- `POST /documents/upload`
+
+Uploads a PDF file, extracts text, chunks it, and stores embeddings in FAISS.
+
+**Response:**
+```json
+{
+  "document_id": "abc123",
+  "filename": "file.pdf",
+  "chunks_indexed": 12
+}
+
+Response of the retrival:
+Response:
+
+{
+  "query": "what is this document about",
+  "answer": "The document describes an Analytics Engineer with experience in...",
+  "sources": [
+    {
+      "content": "Analytics Engineer with 10+ years...",
+      "metadata": {
+        "filename": "resume.pdf",
+        "chunk_index": 2
+      }
+    }
+  ]
+}
+
+
+Tech Stack
+FastAPI (backend API)
+PyPDF (text extraction)
+LangChain (pipeline orchestration)
+HuggingFace Embeddings
+FAISS (vector database)
+Groq LLM (Llama 3)
+

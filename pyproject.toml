@@ -10,4 +10,10 @@ dependencies = [
     "sqlalchemy>=2.0.0",
     "langchain>=0.3.28",
     "python-multipart>=0.0.20",
+    "pypdf>=6.10.2",
+    "langchain-community>=0.3.31",
+    "sentence-transformers>=5.1.2",
+    "faiss-cpu>=1.13.0",
+    "langchain-groq>=0.3.8",
+    "python-dotenv>=1.2.1",
 ]
