@@ -38,10 +38,11 @@ def load_index():
 # RAG PIPELINE
 # -----------------------------
 def ask_documents(query: str, k: int = 4):
-    
+
     vectorstore = load_index()
 
     docs = vectorstore.similarity_search(query, k=k)
+    
 
     context = "\n\n".join([d.page_content for d in docs])
 
