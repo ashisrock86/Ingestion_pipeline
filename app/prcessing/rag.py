@@ -18,7 +18,7 @@ INDEX_PATH = "./faiss_index"
 embeddings = HuggingFaceBgeEmbeddings()
 
 llm = ChatGroq(
-    api_key=os.getenv("GROQ_API_KEY"),
+    api_key='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',
     model="llama3-70b-8192"
 )
 
